@@ -1,0 +1,19 @@
+node {
+    stage('checkoutCode'){
+        git credentialsId: 'a46b5ca3-e808-4341-9629-a6dbed4869c9', url: 'https://github.com/devops-ecomerce-apps/nodejs-app-mss.git'
+    }
+    stage('Build'){
+        nodejs(nodeJSInstallationName : "nodejs18.1.0"){
+          sh "npm install"
+        }
+    }
+    stage('ExecuteSonarQubeReport'){
+        sh "npm run sonar"
+    }
+    stage('Upload into nexus'){
+        sh "npm publish"
+    }
+    stage('Run the application'){
+        sh "npm run" //or node app.js
+    }
+}
